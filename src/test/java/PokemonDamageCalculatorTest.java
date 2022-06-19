@@ -1,22 +1,27 @@
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PokemonDamageCalculatorTest {
 
     @Test
-    void calculate(String attackType, String[] defTypes) {
-        assertEquals(true, true);
-        String fireDmgRateAgainstGrass = PokemonDamageRateCalculator.calculate("fire", "grass");
-        String fightingDmgRate = PokemonDamageRateCalculator.calculate("fighting", "ice", "rock");
-        String psychicDmgRate = PokemonDamageRateCalculator.calculate("psychic", "poison", "dark");
-        String waterDmgRate = PokemonDamageRateCalculator.calculate("water", "normal");
-        String fireDmgRateAgainstRock = PokemonDamageRateCalculator.calculate("fire", "rock");
+    void testCalculateDamageRateAgainstType() {
+        PokemonDamageCalculator calculator = new PokemonDamageCalculator();
 
-        assertEquals(fireDmgRateAgainstGrass, "2x");
-        assertEquals(fightingDmgRate,"4x");
-        assertEquals(psychicDmgRate,"0x");
-        assertEquals(waterDmgRate,"1x");
-        assertEquals(fireDmgRateAgainstRock,"0.5x");
+        String fireDmgRateAgainstGrass = calculator.calculateDamageRateAgainstType("fire", "grass");
+        String fightingDmgRate = calculator.calculateDamageRateAgainstType("fighting", "ice", "rock");
+        String psychicDmgRate = calculator.calculateDamageRateAgainstType("psychic", "poison", "dark");
+        String waterDmgRate = calculator.calculateDamageRateAgainstType("water", "normal");
+        String fireDmgRateAgainstRock = calculator.calculateDamageRateAgainstType("fire", "rock");
+
+        assertEquals("2.0x", fireDmgRateAgainstGrass);
+        assertEquals("4.0x", fightingDmgRate);
+        assertEquals("0.0x", psychicDmgRate);
+        assertEquals("1.0x", waterDmgRate);
+        assertEquals("0.5x", fireDmgRateAgainstRock);
     }
+
+
+
 
 }
