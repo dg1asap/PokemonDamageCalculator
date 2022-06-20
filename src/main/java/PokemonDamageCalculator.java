@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class PokemonDamageCalculator {
     public String calculateDamageRateAgainstType(String damageType, String ... defTypes) throws IllegalArgumentException {
-        HashMap<String, DamageRelationType> damageRelations = new HashMap<>();
+        HashMap<String, DamageRelationType> damageRelations;
         try {
             damageRelations = getDamageRelationsFromDamageType(damageType);
         } catch (UnirestException e) {
@@ -28,8 +28,7 @@ public class PokemonDamageCalculator {
 
     private double calculateDamageRelationsAgainst(HashMap<String, DamageRelationType> damageRelations, String ... defTypes) {
         return damageRelations.keySet().stream()
-                .filter(damageRelation -> Arrays.stream(defTypes)
-                        .anyMatch(defType -> defType.equals(damageRelation)))
+                .filter(damageRelation -> Arrays.asList(defTypes).contains(damageRelation))
                 .mapToDouble(s -> damageRelations.get(s).getRatio())
                 .reduce(1.0, (a, b) -> a * b);
     }
@@ -67,9 +66,9 @@ public class PokemonDamageCalculator {
     private HashMap<String, DamageRelationType> getDamageRelationFromJSONArray(DamageRelationType type, JSONArray array) {
         HashMap<String, DamageRelationType> damageRelation = new HashMap<>();
         for (int i = 0; i < array.length(); i++) {
-            JSONObject dm3 = (JSONObject) array.get(i);
-            String dm4 = (String) dm3.get("name");
-            damageRelation.put(dm4, type);
+            JSONObject damageNameAsJson = (JSONObject) array.get(i);
+            String damageName = (String) damageNameAsJson.get("name");
+            damageRelation.put(damageName, type);
         }
         return damageRelation;
     }
